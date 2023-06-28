@@ -58,6 +58,26 @@ hasPath graph src dest = dfs [] [src]
             | current == dest = True
             | otherwise = dfs (current:explored) (neighbours explored current ++ unexplored)
                 where neighbours explored current = [end | (start, end)<-graph, start == current && not (elem end explored)]
+
+
+{- Max difference between two lists of strings -}
+mxdiflg :: [String] -> [String] -> Maybe Int
+mxdiflg s1 s2
+  | null s1 || null s2 = Nothing
+  | otherwise = if a > b then Just $ a else Just $ b
+    where
+      a = abs ( length (head (sbl s1)) - (length ( head (reverse (sbl s2)))))
+      b = abs ( length (head (sbl s2)) - (length ( head (reverse (sbl s1)))))
+
+-- Sort By Length
+sbl :: [String] -> [String]
+sbl strings = sortBy cmp strings
+  where
+    cmp :: String -> String -> Ordering
+    cmp s1 s2 = compare (length s1) (length s2)
+
+
+
                 
 main :: IO ()
 main = do
