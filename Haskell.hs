@@ -57,7 +57,8 @@ hasPath graph src dest = dfs [] [src]
         dfs explored (current:unexplored)
             | current == dest = True
             | otherwise = dfs (current:explored) (neighbours explored current ++ unexplored)
-                where neighbours explored current = [end | (start, end)<-graph, start == current && not (elem end explored)]
+                where 
+                    neighbours explored current = [end | (start, end)<-graph, start == current && not (elem end explored)]
 
 
 {- Max difference between two lists of strings -}
