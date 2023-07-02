@@ -1,3 +1,7 @@
+import Data.Char
+import Data.List
+
+
 asc :: Int -> Int -> [Int]
 asc n m = aux n m []
     where
@@ -76,6 +80,63 @@ sbl strings = sortBy cmp strings
   where
     cmp :: String -> String -> Ordering
     cmp s1 s2 = compare (length s1) (length s2)
+
+
+
+{-
+    Shunting Yard Algorithm
+    fixes needed
+-}
+
+toPostfix :: String -> String
+toPostfix str = aux str [] []
+  where
+    aux str_ stack queue
+      | null str_ = emptyStack stack queue
+      | isDigit_ ch = aux (tail str_) (stack) (queue ++ [ch])
+      | isOperator ch = aux (tail str_) (stack ++ fst sq) (queue ++ snd sq)
+      | isExpo ch = aux (tail str_) (stack ++ [ch]) queue
+      | isLeftParen ch = aux (tail str_) (stack ++ [ch]) queue
+      | isRightParen ch = aux (tail str_) (fst sqP) (queue ++ snd sqP)
+      | otherwise = queue
+      where
+        ch = head str_
+        isDigit_ c = c >= '0' && c <= '9'
+        isOperator c = c == '+' || c == '-' || c == '*' || c == '/'
+        isExpo c = c == '^'
+        isLeftParen c = c == '('
+        isRightParen c = c == ')'
+        prec c = aux c
+          where
+            aux c
+              | c == '+' || c == '-' = 1
+              | c == '*' || c == '/' = 2
+              | c == '^' = 3
+              | ch == '(' = 0
+              | otherwise = -1
+        updateSQ stk c = aux (reverse stk) c ([], [])
+          where
+            aux s c acc
+              | null s = ([c] ++ fst acc, snd acc)
+              | prec (head s) >= prec c = aux (tail s) c (tail s, (snd acc) ++ [head s])
+              | otherwise = ([c] ++ fst acc, snd acc)
+        updateSQP stk = aux (reverse stk) ([], [])
+          where
+            aux s acc
+              | null s = (tail s, snd acc)
+              | head s /= '(' = aux (tail s) (tail s, (snd acc) ++ [head s])
+              | otherwise = (tail s, snd acc)
+        sq = updateSQ stack ch 
+        sqP = updateSQP stack
+        emptyStack s q = aux (reverse s) q
+          where
+            aux s_ q_
+              | null s_ = q_
+              | otherwise = aux (tail s_) (q_ ++ [head s_ ] )
+          
+          
+          
+          
 
 
 
