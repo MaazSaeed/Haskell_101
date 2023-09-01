@@ -1,6 +1,40 @@
 import Data.Char
 import Data.List
 
+t :: Bool -> Bool -> Bool
+t True True = True
+t _ _ = False
+
+firsts :: [(a, b)] -> [a]
+firsts xs = [x | (x, _) <- xs]
+
+lengthy :: [a] -> Int
+lengthy xs = sum [1 | _ <- xs]
+
+prime :: Int -> Bool
+prime n = aux 2 (n `div` 2)
+    where
+        aux i e
+            | i > e          = True
+            | n `mod` i == 0 = False
+            | otherwise      = aux (i + 1) e
+
+factors :: Int -> [Int]
+factors n = [x | x <- [2..n], prime x]
+
+let2int :: Char -> Int
+let2int x = ord x - ord 'a'
+
+int2let :: Int -> Char
+int2let x = chr ( ord 'a' + x ) 
+
+shift :: Int -> Char -> Char
+shift n c
+    | isLower c = int2let ( (let2int c + n) `mod` 26 )
+    | otherwise = c
+    
+encode :: Int -> String -> String
+encode n xs = [shift n x | x <- xs]
 
 asc :: Int -> Int -> [Int]
 asc n m = aux n m []
@@ -134,8 +168,7 @@ toPostfix str = aux str [] []
               | null s_ = q_
               | otherwise = aux (tail s_) (q_ ++ [head s_ ] )
           
-          
-          
+
           
 
 
@@ -152,6 +185,16 @@ main = do
     print(filt2 fil)
     let nums = [-1, -2, -3]
     print(isAsc nums)
+
+
+
+    print (firsts [(1, 'a'), (2, 'b'), (3, 'c')])
+    print (lengthy [1, 2, 3, 4, 5, 6])
+    print (factors 100)
+    print (encode 3 "haskell is fun")
+    print (encode (-3) "kdvnhoo lv ixq" )
+    
+    
     
     let graph = [(1, 2), (2, 3), (3, 2), (3, 4), (4, 3), (4, 5)]
     print (hasPath graph 1 6)
