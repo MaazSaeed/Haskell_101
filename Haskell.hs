@@ -1,6 +1,25 @@
 import Data.Char
 import Data.List
 
+data Shape = Circle Float | Rect Float Float
+
+data Nat = Zero | Succ Nat deriving Show
+
+nat2int :: Nat -> Int
+nat2int Zero = 0
+nat2int (Succ n) = 1 + nat2int n
+
+int2nat :: Int -> Nat
+int2nat 0 = Zero
+int2nat n = Succ (int2nat (n-1))
+
+square :: Float -> Shape
+square n = Rect n n
+
+area :: Shape -> Float
+area (Circle r) = pi * r^2
+area (Rect x y) = x * y
+
 t :: Bool -> Bool -> Bool
 t True True = True
 t _ _ = False
@@ -198,5 +217,8 @@ main = do
     
     let graph = [(1, 2), (2, 3), (3, 2), (3, 4), (4, 3), (4, 5)]
     print (hasPath graph 1 6)
+
+    print (nat2int (Succ(Succ(Succ(Zero)))))
+
 
 
