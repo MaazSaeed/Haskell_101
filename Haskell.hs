@@ -5,6 +5,15 @@ data Shape = Circle Float | Rect Float Float
 
 data Nat = Zero | Succ Nat deriving Show
 
+data Tree a = Leaf | Node (Tree a) a (Tree a) deriving Show
+
+t :: Tree Int
+t = Node (Node (Leaf 1) 3 (Leaf 4)) 5 (Node (Leaf 6) 7 (Leaf 9))
+
+occurs :: Eq a => a -> Tree a -> Bool
+occurs x (Leaf y) = x == y
+occurs x (Node l y r) = x == y || occurs x l || occurs x r
+
 nat2int :: Nat -> Int
 nat2int Zero = 0
 nat2int (Succ n) = 1 + nat2int n
