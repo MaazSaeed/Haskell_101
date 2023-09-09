@@ -7,6 +7,16 @@ data Nat = Zero | Succ Nat deriving Show
 
 data Tree a = Leaf | Node (Tree a) a (Tree a) deriving Show
 
+data Nat = Zero | Next Nat deriving Show
+
+nat2int :: Nat -> Int
+nat2int Zero     = 0
+nat2int (Next n) = 1 + nat2int n
+
+int2nat :: Int -> Nat
+int2nat 0 = Zero
+int2nat n = Next $ int2nat (n - 1)
+
 t :: Tree Int
 t = Node (Node (Leaf 1) 3 (Leaf 4)) 5 (Node (Leaf 6) 7 (Leaf 9))
 
@@ -228,6 +238,10 @@ main = do
     print (hasPath graph 1 6)
 
     print (nat2int (Succ(Succ(Succ(Zero)))))
+
+    
+    print (nat2int $Next$Next$Next$Next$Next$Next Zero)
+    print (int2nat 6)
 
 
 
