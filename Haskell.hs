@@ -1,6 +1,20 @@
 import Data.Char
 import Data.List
 
+data Expr = Val Int | Add Expr Expr | Mul Expr Expr | Sub Expr Expr | Div Expr Expr
+
+eval :: Expr -> Int
+eval (Val x)   = x
+eval (Add x y) = eval x + eval y
+eval (Mul x y) = eval x * eval y
+eval (Sub x y) = eval x - eval y
+eval (Div x y) = ( eval x ) `div` ( eval y )
+
+expr :: Expr
+expr = Div ( Add ( Val 3 ) ( Mul ( Val 2 ) ( Val 3 ) ) ) ( Sub ( Val 3 ) ( Val 4 ) )
+
+-- ( 3 + ( 2 * 3 ) ) / ( 3 - 4 ) = -1
+
 data Shape = Circle Float | Rect Float Float
 
 data Nat = Zero | Succ Nat deriving Show
@@ -242,6 +256,8 @@ main = do
     
     print (nat2int $Next$Next$Next$Next$Next$Next Zero)
     print (int2nat 6)
+
+    print ( eval expr )
 
 
 
